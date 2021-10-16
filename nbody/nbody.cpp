@@ -13,6 +13,7 @@
 #define _USE_MATH_DEFINES
 #include<math.h> //include <cmath>
 #include <iostream>
+#include<fstream> //output
 
 
 // these values are constant and not allowed to be changed
@@ -237,6 +238,31 @@ body state[] = {
     }
 };
 
+void output_title() //output title info
+{
+    std::ofstream outFile; // create ofstream object
+    outFile.open("test.csv", std::ios::app); // open file
+
+    outFile << "name" << ';' << "X" << ';' << "Y" << ',' << "Z";
+    outFile << std::endl;
+   
+    outFile.close(); // close the file
+}
+
+void output_info(const body (&arr)[BODIES_COUNT]) // output position info
+{
+    std::ofstream outFile; // create ofstream object
+    outFile.open("test.csv", std::ios::app); // open file
+
+    for (int i = 0; i < BODIES_COUNT; ++i)
+    {
+        outFile <<state[i].name<<','<< state[i].position.x << ',' << state[i].position.y << ',' << state[i].position.z;
+        outFile << std::endl;
+                            
+    }
+    outFile.close(); // close the file
+        
+}
 
 int main(int argc, char** argv) {
     if (argc != 2) {
@@ -248,11 +274,14 @@ int main(int argc, char** argv) {
     else {
         const unsigned int n = atoi(argv[1]);
         offset_momentum(state);
-        std::cout << energy(state) << std::endl;
+        std::cout << energy(state) << std::endl; //energy before iteration
+        output_title(); // add title information
         for (int i = 0; i < n; ++i) {
             advance(state, 0.01);
+            //call the output function here
+            output_info(state);
         }
-        std::cout << energy(state) << std::endl;
+        std::cout << energy(state) << std::endl; //energy after iteration
         return EXIT_SUCCESS;
     }
 }
