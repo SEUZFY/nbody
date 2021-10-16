@@ -12,8 +12,11 @@
 
 #define _USE_MATH_DEFINES
 #include<math.h> //include <cmath>
-#include <iostream>
+#include<iostream>
 #include<fstream> //output
+#include<cstring> // C str
+#include<stdlib.h>  //for using c_str()
+#include<string>
 
 
 // these values are constant and not allowed to be changed
@@ -238,29 +241,159 @@ body state[] = {
     }
 };
 
-void output_title() //output title info
+bool is_digit(std::string& s) // judge whether the input is digit
 {
-    std::ofstream outFile; // create ofstream object
-    outFile.open("test.csv", std::ios::app); // open file
-
-    outFile << "name" << ';' << "X" << ';' << "Y" << ',' << "Z";
-    outFile << std::endl;
-   
-    outFile.close(); // close the file
+    char* a = (char*)s.c_str(); // use strpy() when managing char* and string separately
+    for (int i = 0; i < s.length(); ++i)
+    {
+        if (!isdigit(a[i]) && a[i] != '.')return false;
+    }
+    return true;
 }
 
-void output_info(const body (&arr)[BODIES_COUNT]) // output position info
+int input_control() // control the output content
 {
-    std::ofstream outFile; // create ofstream object
-    outFile.open("test.csv", std::ios::app); // open file
+    //output menu
+    std::cout << std::endl;
+    std::cout << "the output content is as follows: " << std::endl;
+    std::cout << std::endl;
+    std::cout << "0(default): output name and position of each body" << std::endl;
+    std::cout << "1: output name, position and velocity of each body" << std::endl;
+    std::cout << "2: output name, position, velocity and mass of each body" << std::endl;
+    std::cout << "3: DO NOT output" << std::endl;
+    std::cout << std::endl;
+    std::cout << "please enter the index of the output content: " << std::endl;
 
-    for (int i = 0; i < BODIES_COUNT; ++i)
+    std::string s; // store the input from user
+    int flag = 0; // 0 is default
+
+    std::cin >> s;
+    while (is_digit(s) == false)
     {
-        outFile <<arr[i].name<<','<< arr[i].position.x << ',' << arr[i].position.y << ',' << arr[i].position.z;
-        outFile << std::endl;
-                            
+        std::cout << "Please enter the right index: " << std::endl;
+        std::cin >> s;
     }
-    outFile.close(); // close the file
+    flag = atoi(s.c_str()); //convert to int
+    return flag;
+
+}
+
+void output_title(const int& flag) //output title info
+{
+    switch (flag)
+    {
+    case 0:
+    {
+        std::ofstream outFile; // create ofstream object
+        outFile.open("test.csv", std::ios::app); // open file
+        outFile << "BodyName" << ';' << "X" << ';' << "Y" << ';' << "Z";
+        outFile << std::endl;
+        outFile.close(); // close the file
+        std::cout << "output 0 is done." << std::endl;
+        break;
+    }
+    case 1:
+    {
+        std::ofstream outFile; // create ofstream object
+        outFile.open("test.csv", std::ios::app); // open file
+        outFile << "BodyName" << ';' << "X" << ';' << "Y" << ';' << "Z" << ';'
+            << "Vx" << ';' << "Vy" << ';' << "Vz";
+        outFile << std::endl;
+        outFile.close(); // close the file
+        std::cout << "output 1 is done." << std::endl;
+        break;
+    }
+    case 2:
+    {
+        std::ofstream outFile; // create ofstream object
+        outFile.open("test.csv", std::ios::app); // open file
+        outFile << "BodyName" << ';' << "X" << ';' << "Y" << ';' << "Z" << ';'
+            << "Vx" << ';' << "Vy" << ';' << "Vz" << ';' << "Mass";
+        outFile << std::endl;
+        outFile.close(); // close the file
+        std::cout << "output 2 is done." << std::endl;
+        break;
+    }
+    case 3: // No output
+    {
+        std::cout << "No output generated." << std::endl;
+        break;
+    }
+    default:
+        std::ofstream outFile; // create ofstream object
+        outFile.open("test.csv", std::ios::app); // open file
+        outFile << "BodyName" << ';' << "X" << ';' << "Y" << ';' << "Z";
+        outFile << std::endl;
+        outFile.close(); // close the file
+        std::cout << "output default content: BodyName, X, Y, Z." << std::endl;
+        break;
+    }
+
+}
+
+void output_info(const body (&arr)[BODIES_COUNT], const int& flag) // output position info
+{         
+    switch (flag)
+    {
+    case 0:
+    {
+        std::ofstream outFile; // create ofstream object
+        outFile.open("test.csv", std::ios::app); // open file
+        for (int i = 0; i < BODIES_COUNT; ++i)
+        {
+            outFile << arr[i].name << ','
+                << arr[i].position.x << ',' << arr[i].position.y << ',' << arr[i].position.z;
+            outFile << std::endl;
+        }
+        outFile.close(); // close the file
+        break;
+    }
+    case 1:
+    {
+        std::ofstream outFile; // create ofstream object
+        outFile.open("test.csv", std::ios::app); // open file
+        for (int i = 0; i < BODIES_COUNT; ++i)
+        {
+            outFile << arr[i].name << ','
+                << arr[i].position.x << ',' << arr[i].position.y << ',' << arr[i].position.z << ','
+                << arr[i].velocity.x << ',' << arr[i].velocity.y << ',' << arr[i].velocity.z;
+            outFile << std::endl;
+        }
+        outFile.close(); // close the file
+        break;
+    }
+    case 2:
+    {
+        std::ofstream outFile; // create ofstream object
+        outFile.open("test.csv", std::ios::app); // open file
+        for (int i = 0; i < BODIES_COUNT; ++i)
+        {
+            outFile << arr[i].name << ','
+                << arr[i].position.x << ',' << arr[i].position.y << ',' << arr[i].position.z << ','
+                << arr[i].velocity.x << ',' << arr[i].velocity.y << ',' << arr[i].velocity.z << ','
+                << arr[i].mass;
+            outFile << std::endl;
+        }
+        outFile.close(); // close the file
+        break;
+    }
+    case 3:
+    {
+        break;
+    }
+    default:
+        std::ofstream outFile; // create ofstream object
+        outFile.open("test.csv", std::ios::app); // open file
+
+        for (int i = 0; i < BODIES_COUNT; ++i)
+        {
+            outFile << arr[i].name << ','
+                << arr[i].position.x << ',' << arr[i].position.y << ',' << arr[i].position.z;
+            outFile << std::endl;
+        }
+        outFile.close(); // close the file
+        break;
+    }   
         
 }
 
@@ -275,11 +408,12 @@ int main(int argc, char** argv) {
         const unsigned int n = atoi(argv[1]);
         offset_momentum(state);
         std::cout << energy(state) << std::endl; //energy before iteration
-        output_title(); // add title information
+        int flag = input_control(); // input control, choose output content
+        output_title(flag); // add title information
         for (unsigned int i = 0; i < n; ++i) {
             advance(state, 0.01);
             //call the output function here
-            output_info(state);
+            output_info(state,flag);
         }
         std::cout << energy(state) << std::endl; //energy after iteration
         return EXIT_SUCCESS;
