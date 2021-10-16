@@ -276,7 +276,7 @@ int main(int argc, char** argv) {
         offset_momentum(state);
         std::cout << energy(state) << std::endl; //energy before iteration
         output_title(); // add title information
-        for (int i = 0; i < n; ++i) {
+        for (unsigned int i = 0; i < n; ++i) {
             advance(state, 0.01);
             //call the output function here
             output_info(state);
