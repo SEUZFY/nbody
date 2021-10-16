@@ -256,7 +256,7 @@ void output_info(const body (&arr)[BODIES_COUNT]) // output position info
 
     for (int i = 0; i < BODIES_COUNT; ++i)
     {
-        outFile <<arr[i].name<<','<< arr[i].position.x << ',' << arr[i].position.y << ',' << arr[i].position.z;
+        outFile <<state[i].name<<','<< state[i].position.x << ',' << state[i].position.y << ',' << state[i].position.z;
         outFile << std::endl;
                             
     }
