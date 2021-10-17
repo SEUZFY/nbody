@@ -14,10 +14,10 @@
 #include<math.h> //include <cmath>
 #include<iostream>
 #include<fstream> //output
-#include<cstring> // C str
-#include<stdlib.h>  //for using c_str()
+#include<cstring> 
+#include<stdlib.h>  
 #include<string>
-
+#include<chrono> //Timer
 
 // these values are constant and not allowed to be changed
 const double SOLAR_MASS = 4 * M_PI * M_PI;
@@ -241,6 +241,26 @@ body state[] = {
     }
 };
 
+struct Timer //for counting the time
+{
+    std::chrono::time_point<std::chrono::steady_clock>start, end;
+    std::chrono::duration<float>duration;
+
+    Timer() //set default value
+    {
+        start = end = std::chrono::high_resolution_clock::now();
+        duration = end - start;
+    }
+
+    ~Timer()
+    {
+        end = std::chrono::high_resolution_clock::now();
+        duration = end - start;
+
+        std::cout << "Time: " << duration.count() << "s\n";
+    }
+};
+
 bool is_digit(std::string& s) // judge whether the input is digit
 {
     char* a = (char*)s.c_str(); // use strpy() when managing char* and string separately
@@ -410,10 +430,14 @@ int main(int argc, char** argv) {
         std::cout << energy(state) << std::endl; //energy before iteration
         int flag = input_control(); // input control, choose output content
         output_title(flag); // add title information
-        for (unsigned int i = 0; i < n; ++i) {
-            advance(state, 0.01);
-            //call the output function here
-            output_info(state,flag);
+        {
+            Timer timer;
+            for (unsigned int i = 0; i < n; ++i)
+            {
+                advance(state, 0.01);
+                //call the output function here
+                output_info(state, flag);
+            }
         }
         std::cout << energy(state) << std::endl; //energy after iteration
         return EXIT_SUCCESS;
