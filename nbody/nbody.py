@@ -129,6 +129,42 @@ def input_control():
     flag = int(input_number)
     return flag
 
+def output_title(flag):
+    if flag == 0:
+        fh = open('test.csv', 'w')
+        fh.write('BodyName;X;Y;Z')
+        fh.close()
+    elif flag == 1:
+        fh = open('test.csv', 'w')
+        fh.write('BodyName;X;Y;Z;Vx;Vy;Vz')
+        fh.close()
+    elif flag == 2:
+        fh = open('test.csv', 'w')
+        fh.write('BodyName;X;Y;Z;Vx;Vy;Vz,Mass')
+        fh.close()
+    elif flag == 3:
+        print("No output generated.")
+
+
+def output_info(flag, bodies=SYSTEM):
+    if flag == 0:
+        fh = open('test.csv', 'w')
+        for ([x, y, z], v, m) in bodies:
+            fh.write(x + ',' + y + ',' + z)
+        fh.close()
+    elif flag == 1:
+        fh = open('test.csv', 'w')
+        for ([x, y, z], v, m) in bodies:
+            fh.write(x + ',' + y + ',' + z + ',' + v[0] + ',' + v[1] + ',' + v[2])
+        fh.close()
+    elif flag == 2:
+        fh = open('test.csv', 'w')
+        for ([x, y, z], v, m) in bodies:
+            fh.write(x + ',' + y + ',' + z+','+v[0] + ',' + v[1] + ',' + v[2]+','+m)
+        fh.close()
+    elif flag == 3:
+        print("No output generated.")
+
 
 if __name__ == "__main__":
     if len(sys.argv) >= 2:
