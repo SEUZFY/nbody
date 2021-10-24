@@ -119,6 +119,16 @@ def main(n, ref="sun"):
     advance(0.01, n)
     report_energy()
 
+def input_control():
+    print("the output content is as follows: ")
+    print("0(default): output name and position of each body")
+    print("1: output name, position and velocity of each body")
+    print("2: output name, position, velocity and mass of each body")
+    print("3: DO NOT output")
+    input_number = input("please enter the index of the output content: ")
+    flag = int(input_number)
+    return flag
+
 
 if __name__ == "__main__":
     if len(sys.argv) >= 2:
